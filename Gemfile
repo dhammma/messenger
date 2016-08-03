@@ -12,6 +12,9 @@ group :development, :test do
   # IDE debug gems
   gem 'debase'
   gem 'ruby-debug-ide'
+
+  # Make Rails server console output better.
+  gem 'quiet_assets'
 end
 
 group :development do

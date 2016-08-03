@@ -67,6 +67,8 @@ GEM
       pkg-config (~> 1.1.7)
     pg (0.18.4)
     pkg-config (1.1.7)
+    quiet_assets (1.1.0)
+      railties (>= 3.1, < 5.0)
     rack (1.6.4)
     rack-contrib (1.4.0)
       git-version-bump (~> 0.15)
@@ -123,6 +125,7 @@ DEPENDENCIES
   debase
   meta_request
   pg
+  quiet_assets
   rails (= 4.2.5)
   rails-api
   ruby-debug-ide

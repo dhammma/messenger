@@ -38,8 +38,13 @@ GEM
       tzinfo (~> 1.1)
     arel (6.0.3)
     builder (3.2.2)
+    callsite (0.0.11)
     concurrent-ruby (1.0.2)
+    debase (0.2.1)
+      debase-ruby_core_source
+    debase-ruby_core_source (0.9.1)
     erubis (2.7.0)
+    git-version-bump (0.15.1)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     i18n (0.7.0)
@@ -48,6 +53,10 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
+    meta_request (0.4.0)
+      callsite (~> 0.0, >= 0.0.11)
+      rack-contrib (~> 1.1)
+      railties (>= 3.0.0, < 5.1.0)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
@@ -59,6 +68,9 @@ GEM
     pg (0.18.4)
     pkg-config (1.1.7)
     rack (1.6.4)
+    rack-contrib (1.4.0)
+      git-version-bump (~> 0.15)
+      rack (~> 1.4)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.5)
@@ -89,6 +101,8 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (11.2.2)
+    ruby-debug-ide (0.6.0)
+      rake (>= 0.8.1)
     spring (1.7.2)
     sprockets (3.7.0)
       concurrent-ruby (~> 1.0)
@@ -106,9 +120,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  debase
+  meta_request
   pg
   rails (= 4.2.5)
   rails-api
+  ruby-debug-ide
   spring
 
 BUNDLED WITH

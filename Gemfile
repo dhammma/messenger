@@ -5,12 +5,22 @@ gem 'rails', '4.2.5'
 
 gem 'rails-api'
 
-gem 'spring', :group => :development
-
-
 gem 'pg'
 
 
+group :development, :test do
+  # IDE debug gems
+  gem 'debase'
+  gem 'ruby-debug-ide'
+end
+
+group :development do
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
+
+  # Gem for Google Chrome extension, that gives a lot of development goodies.
+  gem 'meta_request'
+end
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

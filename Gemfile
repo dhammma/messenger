@@ -7,6 +7,8 @@ gem 'rails-api'
 
 gem 'pg'
 
+# Authentication gem
+gem 'devise'
 
 group :development, :test do
   # IDE debug gems

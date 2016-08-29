@@ -17,6 +17,9 @@ group :development, :test do
 
   # Make Rails server console output better.
   gem 'quiet_assets'
+
+  # Test applications with RSpec
+  gem 'rspec-rails'
 end
 
 group :development do

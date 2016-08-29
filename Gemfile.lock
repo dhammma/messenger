@@ -50,6 +50,7 @@ GEM
       railties (>= 4.1.0, < 5.1)
       responders
       warden (~> 1.2.3)
+    diff-lcs (1.2.5)
     erubis (2.7.0)
     git-version-bump (0.15.1)
     globalid (0.3.7)
@@ -113,6 +114,23 @@ GEM
     rake (11.2.2)
     responders (2.3.0)
       railties (>= 4.2.0, < 5.1)
+    rspec-core (3.5.2)
+      rspec-support (~> 3.5.0)
+    rspec-expectations (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-mocks (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-rails (3.5.2)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      railties (>= 3.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
+      rspec-support (~> 3.5.0)
+    rspec-support (3.5.0)
     ruby-debug-ide (0.6.0)
       rake (>= 0.8.1)
     spring (1.7.2)
@@ -141,6 +159,7 @@ DEPENDENCIES
   quiet_assets
   rails (= 4.2.5)
   rails-api
+  rspec-rails
   ruby-debug-ide
   spring
 

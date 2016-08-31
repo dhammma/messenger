@@ -26,5 +26,11 @@ module Messenger
     config.to_prepare do
       DeviseController.respond_to :html, :json
     end
+
+    config.generators do |g|
+      # Disable fixtures. Use factory girl instead
+      g.fixture_replacement :factory_girl
+      g.factory_girl suffix: 'factory'
+    end
   end
 end

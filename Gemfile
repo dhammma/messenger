@@ -20,6 +20,9 @@ group :development, :test do
 
   # Test applications with RSpec
   gem 'rspec-rails'
+
+  # Gem for test data generation
+  gem 'factory_girl_rails'
 end
 
 group :development do

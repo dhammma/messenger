@@ -17,6 +17,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  username: <%= Rails.application.secrets.db_username %>
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: 5
@@ -81,5 +82,4 @@ test:
 production:
   <<: *default
   database: messenger_production
-  username: messenger
   password: <%= ENV['MESSENGER_DATABASE_PASSWORD'] %>

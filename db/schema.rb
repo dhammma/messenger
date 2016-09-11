@@ -11,10 +11,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160806144604) do
+ActiveRecord::Schema.define(version: 20160910131141) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "chat_members", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "chat_id"
+    t.integer "roles_mask"
+  end
+
+  add_index "chat_members", ["chat_id"], name: "index_chat_members_on_chat_id", using: :btree
+  add_index "chat_members", ["user_id"], name: "index_chat_members_on_user_id", using: :btree
+
+  create_table "chats", force: :cascade do |t|
+    t.string "title"
+    t.string "type"
+  end
+
+  create_table "group_chats", id: false, force: :cascade do |t|
+    t.integer "id",                default: "nextval('chats_id_seq'::regclass)", null: false
+    t.string  "title"
+    t.string  "type"
+    t.boolean "everyone_is_admin"
+  end
+
+  add_index "group_chats", ["id"], name: "index_group_chats_on_id", using: :btree
+
+  create_table "private_chats", id: false, force: :cascade do |t|
+    t.integer "id",    default: "nextval('chats_id_seq'::regclass)", null: false
+    t.string  "title"
+    t.string  "type"
+  end
+
+  add_index "private_chats", ["id"], name: "index_private_chats_on_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

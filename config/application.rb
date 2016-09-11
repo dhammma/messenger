@@ -30,6 +30,9 @@ module Messenger
     # Add /lib directory to autoload paths
     config.autoload_paths << Rails.root.join('lib')
 
+    # and nested models directories
+    config.autoload_paths += Dir[Rails.root.join('app', 'models', '*/')]
+
     config.generators do |g|
       # Disable fixtures. Use factory girl instead
       g.fixture_replacement :factory_girl

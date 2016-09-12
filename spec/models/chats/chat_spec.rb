@@ -1,0 +1,151 @@
+require 'rails_helper'
+
+RSpec.describe Chat, type: :model do
+  describe 'member_roles method' do
+    before :each do
+      @initial_roles = ChatMember::ROLES - [ChatMember::ROLES.first]
+
+      @chat = create :chat_with_member
+      @member = @chat.members.first
+
+      @chat.chat_members.each do |chat_member|
+        @chat_member = chat_member if chat_member.user == @member
+        @chat_member.roles = @initial_roles
+      end
+    end
+
+    context 'with unknown strategy' do
+      it 'raises an exception' do
+        expect { @chat.member_roles @member, [], :unknown }.to raise_error(RuntimeError)
+      end
+    end
+
+    context 'with array of roles and :set strategy' do
+      it 'sets roles to argument value' do
+        test_member_roles :set
+      end
+    end
+
+    context 'with :add strategy' do
+      it 'adds argument value to member roles' do
+        test_member_roles :add do |current_case|
+          current_case | @initial_roles
+        end
+      end
+    end
+
+    context 'with :sub strategy' do
+      it 'subtracts argument value from member roles' do
+        test_member_roles :sub do |current_case|
+          @initial_roles - current_case
+        end
+      end
+    end
+
+    def test_member_roles(strategy)
+      test_cases = [
+          # Array of roles
+          ChatMember::ROLES.dup,
+          [ChatMember::ROLES.first],
+          [ChatMember::ROLES.first.to_sym],
+          [],
+
+          # Single roles
+          ChatMember::ROLES.first,
+          ChatMember::ROLES.first.to_sym
+      ]
+
+      test_cases.each do |current_case|
+        result = @chat.member_roles @member, current_case, strategy
+
+        # Ensure that current case is an Array in order to unify next inspections
+        current_case = [current_case] unless current_case.is_a? Array
+
+        # Method returns array of string roles,
+        # so we should convert roles (it could be Symbol) to strings before comparison
+        current_case.map! { |r| r.to_s }
+
+        # Delegate building of the expected result to the block
+        new_roles = block_given? ? yield(current_case) : current_case
+
+        expect(result).to match_array(new_roles)
+        expect(result).to match_array(@chat.member_roles @member)
+        expect(result).to match_array(@chat_member.roles)
+
+        # Return member roles to initial state
+        @chat_member.roles = @initial_roles
+      end
+    end
+  end
+
+  describe 'members association' do
+    before :each do
+      @chat = create :chat_with_member
+      @member = @chat.members.first
+    end
+
+    context 'when association is not unique' do
+      it 'saves it only one time' do
+        @chat.members << create(:user)
+        @chat.members << @member
+        expect(@chat.members.uniq).to match_array(@chat.members)
+      end
+    end
+  end
+
+  describe 'members_by_role method' do
+    context 'when chat contains members with required roles' do
+      it 'returns list of members with this roles' do
+        chat = create :chat_with_members, members: [
+            { roles: ChatMember::ROLES.first },
+            { roles: ChatMember::ROLES.last },
+            { roles: ChatMember::ROLES.dup }
+        ]
+
+        [
+            ChatMember::ROLES.first,
+            [ChatMember::ROLES.last],
+            ChatMember::ROLES.dup
+        ].each do |roles|
+          members = chat.members_by_role roles
+
+          roles = [roles] unless roles.is_a? Array
+
+          members.each do |member|
+            expect(member).to be_a(User)
+
+            member_roles = member.chat_roles chat
+            expect((roles & member_roles).size).to be(roles.size)
+          end
+        end
+      end
+    end
+
+    context 'when chat does not contain members with required roles' do
+      it 'returns empty array' do
+        chat = create :chat_with_members, members: [
+            { roles: ChatMember::ROLES.first },
+            { roles: ChatMember::ROLES.first },
+            { roles: ChatMember::ROLES.first }
+        ]
+
+        [
+            ChatMember::ROLES.last,
+            [ChatMember::ROLES.last],
+            ChatMember::ROLES.dup
+        ].each do |roles|
+          members = chat.members_by_role roles
+
+          roles = [roles] unless roles.is_a? Array
+
+          members.each do |member|
+            expect(member).to be_a(User)
+
+            member_roles = member.chat_roles chat
+            expect((roles & member_roles).size).to be(0)
+          end
+        end
+      end
+    end
+  end
+end

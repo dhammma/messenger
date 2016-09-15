@@ -148,4 +148,94 @@ RSpec.describe Chat, type: :model do
       end
     end
   end
+
+  describe 'find_by_members class method' do
+    context 'when sought-for chat exists' do
+      def test_all_user_combinations
+        @users.size.times do |i|
+          # Use (i + 1) because it starts from 0
+          @users.combination(i + 1).each do |combination|
+            detected = Chat.find_by_members(combination).to_a
+            expect(detected.map { |e| e.id }).to match_array(@chats.map { |e| e.id })
+          end
+        end
+      end
+
+      before :each do
+        @chat = build :chat
+
+        @users = [
+            create(:user),
+            create(:user),
+            create(:user),
+            create(:user),
+        ]
+
+        @users.each do |user|
+          @chat.add_member user
+        end
+
+        @chat.save
+
+        # Array of chat that have to be found
+        @chats = [@chat]
+      end
+
+      context 'and it is the only one' do
+        it 'finds this chat' do
+          test_all_user_combinations
+        end
+      end
+
+      context 'and it is not the only one' do
+        before :each do
+          @chat2 = build :chat
+
+          @users.each do |user|
+            @chat2.add_member user
+          end
+
+          # Add additional users
+          @chat2.add_member create(:user)
+          @chat2.add_member create(:user)
+
+          @chat2.save
+
+          @chats << @chat2
+
+          # Create chat that must not be found
+          @chat3 = build :chat
+          6.times { @chat2.add_member create(:user) }
+          @chat3.save
+        end
+
+        it 'finds the both chats' do
+          test_all_user_combinations
+        end
+      end
+    end
+
+    context 'when sought-for chat does not exist' do
+      before :each do
+        # Create 6 chats with random members
+        6.times do
+          members = Array.new(3 + rand(4)).fill({ roles: [:member] })
+          create(:chat_with_members, members: members)
+        end
+      end
+
+      it 'finds nothing' do
+        test_cases = [
+            create(:user),
+            [create(:user), create(:user)],
+            [create(:user), create(:user), create(:user)]
+        ]
+
+        test_cases.each do |members|
+          detected = Chat.find_by_members(members)
+          expect(detected.size).to be(0)
+        end
+      end
+    end
+  end
 end

@@ -164,12 +164,7 @@ RSpec.describe Chat, type: :model do
       before :each do
         @chat = build :chat
 
-        @users = [
-            create(:user),
-            create(:user),
-            create(:user),
-            create(:user),
-        ]
+        @users = create_list(:user, 4)
 
         @users.each do |user|
           @chat.add_member user
@@ -227,8 +222,8 @@ RSpec.describe Chat, type: :model do
       it 'finds nothing' do
         test_cases = [
             create(:user),
-            [create(:user), create(:user)],
-            [create(:user), create(:user), create(:user)]
+            create_list(:user, 2),
+            create_list(:user, 3)
         ]
 
         test_cases.each do |members|

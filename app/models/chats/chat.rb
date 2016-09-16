@@ -1,6 +1,7 @@
 class Chat < ActiveRecord::Base
   has_many :chat_members
   has_many :members, through: :chat_members, class_name: 'User', source: :user, before_add: :check_members_uniqueness
+  has_many :messages
 
   scope :find_by_members, (-> (users) do
     users = [users] unless users.is_a? Array

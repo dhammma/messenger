@@ -1,4 +1,3 @@
-require 'benchmark'
 class Chat < ActiveRecord::Base
   has_many :chat_members
   has_many :members, through: :chat_members, class_name: 'User', source: :user, before_add: :check_members_uniqueness

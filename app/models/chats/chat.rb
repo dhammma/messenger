@@ -64,7 +64,7 @@ class Chat < ActiveRecord::Base
   end
 
   def check_members_uniqueness(member)
-    duplicate = members.detect { |current| current == member }
+    duplicate = members.detect { |current| current.id == member.id }
     members.delete duplicate if duplicate.present?
   end
 

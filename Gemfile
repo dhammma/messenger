@@ -8,7 +8,7 @@ gem 'rails-api'
 gem 'pg'
 
 # Authentication gem
-gem 'devise'
+gem 'devise_token_auth'
 
 group :development, :test do
   # IDE debug gems

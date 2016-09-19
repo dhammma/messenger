@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, :controllers => { :registrations => 'registrations', :sessions => 'sessions' }, defaults: { format: :json }
+  mount_devise_token_auth_for 'User', at: 'auth', defaults: { format: :json }
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

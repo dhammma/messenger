@@ -21,4 +21,11 @@ class ChatMember < ActiveRecord::Base
       ((roles_mask.to_i || 0) & 2**ROLES.index(r)).zero?
     end
   end
+
+  def to_api_response
+    member_info = super
+    member_info[:roles] = roles
+
+    member_info
+  end
 end

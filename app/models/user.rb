@@ -16,4 +16,12 @@ class User < ActiveRecord::Base
     end
     member.nil? ? nil : member.roles
   end
+
+  def to_api_response
+    user_info = super
+    user_info[:nickname] = nickname
+    user_info[:email] = email
+
+    user_info
+  end
 end

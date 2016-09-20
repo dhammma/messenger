@@ -76,4 +76,12 @@ class Chat < ActiveRecord::Base
       (roles & member_roles).size == roles.size
     end.map { |m| m.user }
   end
+
+  def to_api_response
+    chat_info = super
+    chat_info[:title] = title
+    chat_info[:members] = members.map(&:to_api_response)
+
+    chat_info
+  end
 end

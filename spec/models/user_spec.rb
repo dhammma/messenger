@@ -29,4 +29,42 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe 'nickname' do
+    context 'when nickname is not set' do
+      it 'cuts part from email' do
+        user = build :user
+        user.nickname = ''
+
+        expect(user.save).to be(true)
+
+        expect(user.nickname).not_to eq('')
+        expect(user.email).to eq("#{user.nickname}@#{user.email[/@(.+)/, 1]}")
+      end
+    end
+
+    context 'when nickname is set' do
+      it 'still with no changes' do
+        nickname = 'nickname'
+        user = build :user
+        user.nickname = nickname
+
+        expect(user.save).to be(true)
+        expect(user.nickname).to eq(nickname)
+      end
+    end
+
+    context 'when nickname contains unacceptable characters' do
+      it 'does not save user' do
+        wrong_nicknames = ['a a', '9dfd', '-f', '&dfsf']
+        wrong_nicknames.each do |nickname|
+          user = build :user
+          user.nickname = nickname
+
+          expect(user.save).to be(false)
+          expect(user.errors[:nickname].blank?).not_to be(true)
+        end
+      end
+    end
+  end
 end

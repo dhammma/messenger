@@ -10,11 +10,22 @@ class User < ActiveRecord::Base
   has_many :chats, through: :chat_members
   has_many :messages
 
+  validates :nickname, format: { with: /\A[a-zA-Z][a-zA-Z0-9_\-\.]+\Z/,
+                                 message: 'only allows letters, numbers, points, dashes and underscores' }
+
+  before_validation :set_nickname
+
   def chat_roles(chat)
     member = chat_members.detect do |m|
       m.chat == chat
     end
     member.nil? ? nil : member.roles
+  end
+
+  def set_nickname
+    if nickname.blank?
+      self.nickname = email.to_s[/([^@]*)/, 1]
+    end
   end
 
   def to_api_response

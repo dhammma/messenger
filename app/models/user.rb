@@ -10,8 +10,9 @@ class User < ActiveRecord::Base
   has_many :chats, through: :chat_members
   has_many :messages
 
-  validates :nickname, format: { with: /\A[a-zA-Z][a-zA-Z0-9_\-\.]+\Z/,
-                                 message: 'only allows letters, numbers, points, dashes and underscores' }
+  validates :nickname, uniqueness: true,
+            format: { with: /\A[a-zA-Z][a-zA-Z0-9_\-\.]+\Z/,
+                      message: 'only allows letters, numbers, points, dashes and underscores' }
 
   before_validation :set_nickname
 

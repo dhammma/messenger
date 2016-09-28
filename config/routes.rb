@@ -6,6 +6,14 @@ Rails.application.routes.draw do
       token_validations: 'users/token_validations'
   }
 
+  resources :chats do
+    member do
+      post :leave
+    end
+
+    resources :members, param: :nickname
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

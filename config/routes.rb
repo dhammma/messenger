@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     end
 
     resources :members, param: :nickname
+
+    resources :messages
   end
 
   get 'private_chats/:target' => 'private_chats#get'

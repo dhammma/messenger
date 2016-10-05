@@ -18,7 +18,7 @@ class PrivateChat < Chat
       private.add_member user1
       private.add_member user2
       private.title = "Private chat, users #{user1.id} and #{user2.id}"
-      private.save
+      private.save!
     end
 
     private

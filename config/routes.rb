@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'message/index'
+
   mount_devise_token_auth_for 'User', at: 'auth', defaults: { format: :json }, controllers: {
       sessions: 'users/sessions',
       registrations: 'users/registrations',
@@ -13,6 +15,8 @@ Rails.application.routes.draw do
 
     resources :members, param: :nickname
   end
+
+  get 'private_chats/:target' => 'private_chats#get'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

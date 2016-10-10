@@ -2,12 +2,14 @@ class MessagesController < ApplicationController
   def index
     chat = Chat.find params[:chat_id]
 
-    messages_number = chat.messages.size
+    page = (params.include? :page) ? params[:page] : nil
 
-    offset = messages_number - params[:per_page].to_i * params[:page].to_i
-    offset = 0 if offset < 0
-
-    messages = chat.messages.limit(params[:per_page]).offset(offset).order(created_at: :asc)
+    if page.present?
+      per_page = (params.include? :per_page) ? params[:per_page] : 50
+      messages = chat.messages.page(page).per(per_page).order(created_at: :desc)
+    else
+      messages = chat.messages.order(created_at: :asc)
+    end
 
     render json: { messages: messages.map(&:to_api_response) }
   end

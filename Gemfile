@@ -7,6 +7,9 @@ gem 'rails-api'
 
 gem 'pg'
 
+# Use kaminari for pagination
+gem 'kaminari'
+
 # Authentication gem
 gem 'devise_token_auth'
 

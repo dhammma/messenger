@@ -6,9 +6,9 @@ class MessagesController < ApplicationController
 
     if page.present?
       per_page = (params.include? :per_page) ? params[:per_page] : 50
-      messages = chat.messages.page(page).per(per_page).order(created_at: :desc)
+      messages = chat.messages.includes(:user).page(page).per(per_page).order(created_at: :desc)
     else
-      messages = chat.messages.order(created_at: :asc)
+      messages = chat.messages.includes(:user).order(created_at: :asc)
     end
 
     render json: { messages: messages.map(&:to_api_response) }

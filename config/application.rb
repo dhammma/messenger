@@ -38,5 +38,14 @@ module Messenger
       g.fixture_replacement :factory_girl
       g.factory_girl suffix: 'factory'
     end
+
+    # Faye requires to disable Rack::Lock
+    config.middleware.delete Rack::Lock
+    config.middleware.use FayeRails::Middleware, mount: '/faye', :timeout => 25 do
+      # Authenticate clients on each websocket subscription
+      map '/**' => Faye::AuthenticationController
+      map '/messages/*' => Faye::MessagesController
+      map :default => :block
+    end
   end
 end

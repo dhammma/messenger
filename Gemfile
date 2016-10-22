@@ -7,6 +7,12 @@ gem 'rails-api'
 
 gem 'pg'
 
+# Use Thin web server, it is required for Faye
+gem 'thin'
+
+# Use Faye as websockets provider
+gem 'faye-rails'
+
 # Use kaminari for pagination
 gem 'kaminari'
 

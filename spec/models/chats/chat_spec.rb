@@ -233,4 +233,31 @@ RSpec.describe Chat, type: :model do
       end
     end
   end
+
+  describe 'order_by_last_message scope' do
+    context 'with wrong argument' do
+      it 'raises ArgumentError' do
+        test_cases = [:symbol, 'string', []]
+        test_cases.each do |tet_case|
+          expect { Chat.order_by_last_message tet_case }.to raise_error(ArgumentError)
+        end
+
+        chat = create :chat_with_members
+        chat
+      end
+    end
+
+    context 'with right argument' do
+      it 'returns ordered relation' do
+        create_list :chat_with_members, 5
+
+        chats = Chat.order_by_last_message(:desc).all.to_a
+        sorted = chats.sort_by do |chat|
+          chat.messages.order(created_at: :desc).first.created_at
+        end.reverse
+
+        expect(sorted == chats).to be(true)
+      end
+    end
+  end
 end

@@ -3,6 +3,24 @@ class Chat < ActiveRecord::Base
   has_many :members, through: :chat_members, class_name: 'User', source: :user, before_add: :check_members_uniqueness
   has_many :messages
 
+  scope :order_by_last_message, (-> (order = 'DESC') do
+    order = order.to_s.upcase
+    raise ArgumentError.new('Order can be only ASC or DESC!') unless %w(ASC DESC).include? order
+
+    # Prepare subquery SQL. It contains last message date and chat id
+    subquery = Message.select('MAX("created_at") AS "last_message_date"', :chat_id).group(:chat_id).to_sql
+
+    # Memorize relation to get it values attribute.
+    # It contains information about each query part (select, form, etc.)
+    relation = joins('INNER JOIN (' + subquery + ') "order_by_last_message" ON "chats"."id" = "order_by_last_message"."chat_id"')
+                   .order('"order_by_last_message"."last_message_date" ' + order)
+
+    # If relation select section is empty,
+    # add all fields from model table to make it behave as expected
+    relation = relation.select('"' + table_name + '".*') unless relation.values[:select]
+    relation.select('"order_by_last_message"."last_message_date"')
+  end)
+
   scope :find_by_members, (-> (users) do
     users = [users] unless users.is_a? Array
     users = users.map do |current|

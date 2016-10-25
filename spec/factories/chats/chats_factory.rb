@@ -26,7 +26,7 @@ FactoryGirl.define do
 
     factory :chat_with_members do
       transient do
-        members []
+        members [{ roles: ChatMember::ROLES }]
       end
 
       after(:create) do |chat, evaluator|
@@ -35,6 +35,11 @@ FactoryGirl.define do
             member[:roles] ||= []
             chat.add_member create(:user), member[:roles]
           end
+        end
+
+        (2 + rand(5)).times do
+          user = chat.members.sample
+          chat.messages << create(:message, user: user, chat: chat) if user
         end
       end
     end

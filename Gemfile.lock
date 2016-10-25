@@ -63,6 +63,8 @@ GEM
       em-socksify (>= 0.3)
       eventmachine (>= 1.0.3)
       http_parser.rb (>= 0.6.0)
+    em-rspec (0.1.1)
+      eventmachine (>= 0.12.10)
     em-socksify (0.3.1)
       eventmachine (>= 1.0.0.beta.4)
     erubis (2.7.0)
@@ -153,6 +155,10 @@ GEM
     rake (11.2.2)
     responders (2.3.0)
       railties (>= 4.2.0, < 5.1)
+    rspec (3.5.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
     rspec-core (3.5.2)
       rspec-support (~> 3.5.0)
     rspec-expectations (3.5.0)
@@ -200,6 +206,7 @@ PLATFORMS
 DEPENDENCIES
   debase
   devise_token_auth
+  em-rspec
   factory_girl_rails
   faye-rails
   kaminari
@@ -208,6 +215,7 @@ DEPENDENCIES
   quiet_assets
   rails (= 4.2.5)
   rails-api
+  rspec
   rspec-rails
   ruby-debug-ide
   spring

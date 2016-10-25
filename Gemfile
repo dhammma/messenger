@@ -28,7 +28,9 @@ group :development, :test do
   gem 'quiet_assets'
 
   # Test applications with RSpec
+  gem 'rspec'
   gem 'rspec-rails'
+  gem 'em-rspec'
 
   # Gem for test data generation
   gem 'factory_girl_rails'

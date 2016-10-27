@@ -4,7 +4,17 @@ class ChatsController < ApplicationController
                 .where(chat_members: { user: current_user })
                 .order_by_last_message.distinct.all
 
-    chats_info = chats.map(&:to_api_response)
+    chats_info = chats.map do |chat|
+      info = chat.to_api_response
+      if chat.is_a? PrivateChat
+        # Replace private chat title with interlocutor name
+        info[:title] = '@' + chat.members.reject do |user|
+          !chat.self_chat? and user.id == current_user.id
+        end.first.nickname
+      end
+
+      info
+    end
 
     render json: { chats: chats_info }
   end

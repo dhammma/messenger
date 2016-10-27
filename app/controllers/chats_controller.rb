@@ -1,6 +1,8 @@
 class ChatsController < ApplicationController
   def index
-    chats = Chat.joins(:chat_members).includes(:members).where(chat_members: { user: current_user }).all
+    chats = Chat.joins(:chat_members).includes(:members)
+                .where(chat_members: { user: current_user })
+                .order_by_last_message.distinct.all
 
     chats_info = chats.map(&:to_api_response)
 

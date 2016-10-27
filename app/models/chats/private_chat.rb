@@ -41,4 +41,8 @@ class PrivateChat < Chat
 
     member.present? ? find_by_id(member.chat_id) : false
   end
+
+  def self_chat?
+    members.first.id == members.last.id
+  end
 end

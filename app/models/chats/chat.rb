@@ -12,7 +12,7 @@ class Chat < ActiveRecord::Base
 
     # Memorize relation to get it values attribute.
     # It contains information about each query part (select, form, etc.)
-    relation = joins('INNER JOIN (' + subquery + ') "order_by_last_message" ON "' + table_name + '"."id" = "order_by_last_message"."chat_id"')
+    relation = joins('LEFT JOIN (' + subquery + ') "order_by_last_message" ON "' + table_name + '"."id" = "order_by_last_message"."chat_id"')
                    .order('"order_by_last_message"."last_message_date" ' + order)
 
     # If relation select section is empty,

@@ -13,6 +13,10 @@ Rails.application.routes.draw do
       post :leave
     end
 
+    collection do
+      get ':type', action: :index
+    end
+
     resources :members, param: :nickname
 
     resources :messages

@@ -1,6 +1,11 @@
 class ChatsController < ApplicationController
   def index
-    chats = Chat.joins(:chat_members).includes(:members)
+    klass = chat_class params[:type]
+    unless klass
+      render json: { errors: ['Wrong chat type!'] }, status: 400 and return
+    end
+
+    chats = klass.joins(:chat_members).includes(:members)
                 .where(chat_members: { user: current_user })
                 .order_by_last_message.distinct.all
 
@@ -30,11 +35,8 @@ class ChatsController < ApplicationController
   end
 
   def create
-    klass = ''
-    case params[:type].to_s.underscore
-    when 'group'
-      klass = GroupChat
-    else
+    klass = chat_class params[:type]
+    unless klass
       render json: { errors: ['Wrong chat type!'] }, status: 400 and return
     end
 
@@ -90,5 +92,19 @@ class ChatsController < ApplicationController
 
   def render_not_chat_member
     render json: { errors: ['You are not the member of this chat!'] }, status: 400
+  end
+
+  def chat_class(type)
+    type ||= :all
+    case type.to_s.underscore.to_sym
+    when :group, :group_chat
+      GroupChat
+    when :private, :private_chat
+      PrivateChat
+    when :all
+      Chat
+    else
+      false
+    end
   end
 end

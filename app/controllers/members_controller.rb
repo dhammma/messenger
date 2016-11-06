@@ -2,7 +2,7 @@ class MembersController < ApplicationController
   def index
     chat = Chat.find params[:chat_id]
 
-    render json: chat.members.map(&:to_api_response)
+    render json: { members: chat.members.map(&:to_api_response) }
   end
 
   def create
@@ -17,7 +17,7 @@ class MembersController < ApplicationController
         chat.save!
       end
 
-      render json: chat.to_api_response
+      render json: { chat: chat.to_api_response }
     else
       render json: { errors: ['You are not the member of this chat!'] }, status: 400
     end
@@ -38,7 +38,7 @@ class MembersController < ApplicationController
         chat.save!
       end
 
-      render json: chat.to_api_response
+      render json: { chat: chat.to_api_response }
     else
       render json: { errors: ['You are not the member of this chat!'] }, status: 400
     end

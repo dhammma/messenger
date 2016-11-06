@@ -10,6 +10,9 @@ class User < ActiveRecord::Base
   has_many :chats, through: :chat_members
   has_many :messages
 
+  has_many :contact_relations
+  has_many :contacts, through: :contact_relations, class_name: 'User'
+
   validates :nickname, uniqueness: true,
             format: { with: /\A[a-zA-Z][a-zA-Z0-9_\-\.]+\Z/,
                       message: 'only allows letters, numbers, points, dashes and underscores' }

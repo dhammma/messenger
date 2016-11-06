@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161005132046) do
+ActiveRecord::Schema.define(version: 20161105184107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,15 @@ ActiveRecord::Schema.define(version: 20161005132046) do
     t.string "title"
     t.string "type"
   end
+
+  create_table "contact_relations", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "contact_id"
+  end
+
+  add_index "contact_relations", ["contact_id"], name: "index_contact_relations_on_contact_id", using: :btree
+  add_index "contact_relations", ["user_id", "contact_id"], name: "index_contact_relations_on_user_id_and_contact_id", using: :btree
+  add_index "contact_relations", ["user_id"], name: "index_contact_relations_on_user_id", using: :btree
 
   create_table "group_chats", id: false, force: :cascade do |t|
     t.integer "id",                default: "nextval('chats_id_seq'::regclass)", null: false

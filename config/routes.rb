@@ -8,6 +8,8 @@ Rails.application.routes.draw do
       token_validations: 'users/token_validations'
   }
 
+  resources :contacts, only: [:index, :create, :destroy], param: :nickname
+
   resources :chats do
     member do
       post :leave
